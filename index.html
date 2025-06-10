@@ -73,7 +73,11 @@
       boardSize = difficultySettings[difficulty].size;
       mineCount = difficultySettings[difficulty].mines;
 
-      board = Array.from({ length: boardSize }, () => Array(boardSize).fill({ mine: false, revealed: false, count: 0 }));
+      // 🔧 각 셀이 독립된 객체가 되도록 수정
+      board = Array.from({ length: boardSize }, () =>
+        Array.from({ length: boardSize }, () => ({ mine: false, revealed: false, count: 0 }))
+      );
+
       placeMines();
       calculateCounts();
       renderBoard();
@@ -93,7 +97,7 @@
         const row = Math.floor(Math.random() * boardSize);
         const col = Math.floor(Math.random() * boardSize);
         if (!board[row][col].mine) {
-          board[row][col] = { ...board[row][col], mine: true };
+          board[row][col].mine = true;
           minesPlaced++;
         }
       }
@@ -113,7 +117,7 @@
               }
             }
           }
-          board[r][c] = { ...board[r][c], count };
+          board[r][c].count = count;
         }
       }
     }
